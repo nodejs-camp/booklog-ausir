@@ -25,25 +25,12 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 
-var version = '/1' ;
 var posts = [];
 
-app.post('/aa',function(req,res){
-	res.send({success:true,body:req.body,query:req.query});
 
+app.all('/welecome',function(req,res){
+	res.render('index');
 });
-
-app.all('*', function(req , res , next){
-	if( req.headers.host === 'localhost:3000'){
-		res.send('access denied');
-	}else{
-		next();
-	}
-
-	
-});
-
-//app.all('*');
 
 app.post('/member',function(req,res){});
 app.get('/member',function(req,res){});

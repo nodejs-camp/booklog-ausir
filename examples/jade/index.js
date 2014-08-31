@@ -33,13 +33,6 @@ app.post('/aa',function(req,res){
 
 });
 
-app.all('*', function(req , res , next){
-	if( req.headers.host === 'localhost:3000'){
-		res.send('access denied');
-	}else{
-		next();
-	}
-});
 
 app.post('/member',function(req,res){});
 app.get('/member',function(req,res){});
