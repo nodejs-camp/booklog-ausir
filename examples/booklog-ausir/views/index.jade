@@ -1,8 +1,6 @@
-doctype html
-html
-	head
-		title Hello
-	body
-		each val in posts
-			h1: =val.subject
-			p: =val.content
+extend layout.jade
+
+block content
+	each val in posts
+		h3: =val.subject
+		p: =val.content

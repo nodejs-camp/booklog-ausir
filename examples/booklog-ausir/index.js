@@ -25,7 +25,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 
-var posts = [{subject:'dummy 1',content:'dummy 111'},{subject:'dummy 2',content:'dummy 222'}];
+var posts = [{subject:'會員 member',content:'[post]	/member					建立會員'},{subject:'會員 member',content:'[get]	/member/:m_id			取得會員資料'}];
 
 
 app.all('/welecome',function(req,res){
