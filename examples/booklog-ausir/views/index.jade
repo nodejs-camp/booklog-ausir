@@ -1,6 +1,38 @@
 extend layout.jade
 
+
+block sidebar
+	div.col-sm-3.col-md-2.sidebar
+		ul.nav.nav-sidebar
+			li.active
+				a(href='#') {{c_name}}
+			li
+				a(href='#') Reports
+			li
+				a(href='#') Analytics
+			li
+				a(href='#') Export
+			ul.nav.nav-sidebar
+			li
+				a(href='') Nav item
+			li
+				a(href='') Nav item again
+			li
+				a(href='') One more nav
+			li
+				a(href='') Another nav item
+			li
+				a(href='') More navigation
+		ul.nav.nav-sidebar
+			li
+				a(href='') Nav item again
+			li
+				a(href='') One more nav
+			li
+				a(href='') Another nav item
+
+
 block content
-	each val in posts
-		h3: =val.subject
-		p: =val.content
+	
+
+

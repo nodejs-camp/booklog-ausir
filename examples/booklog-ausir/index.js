@@ -25,11 +25,31 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 
+
+/**
+ * CORS support.
+ */
+app.all('*', function(req, res, next){
+  if (!req.get('Origin')) return next();
+  // use "*" here to accept any origin
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'PUT');
+  res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
+  // res.set('Access-Control-Allow-Max-Age', 3600);
+  if ('OPTIONS' == req.method) return res.send(200);
+  next();
+});
+
 var posts = [{subject:'會員 member',content:'[post]	/member					建立會員'},{subject:'會員 member',content:'[get]	/member/:m_id			取得會員資料'}];
 
+var member = [{m_id:1,m_name:'ausir'}];
+var organization = [{g_id:1,g_name:"finpo"}];
+var project = [{p_id:1,p_name:"bueautyAPI"}];
+var category = [{c_id:1,c_name:'member 會員'},{c_id:2,c_name:'organization 組織'},{c_id:3,c_name:'project 專案'}];
+var api = [{a_id:1,a_data:[{path:"/member",method:"POST",desc:"建立會員"},{path:"/member",method:"GET",desc:"取得會員"}]}];
 
 app.all('/welecome',function(req,res){
-	res.render('index',{ posts: posts});
+	res.render('index');
 });
 
 app.post('/member',function(req,res){});
@@ -53,7 +73,9 @@ app.put('/project/:p_id',function(req,res){});
 app.delete('/project/:p_id',function(req,res){});
 
 app.post('/category',function(req,res){});
-app.get('/category',function(req,res){});
+app.get('/category',function(req,res){
+	res.send({success:true , rows:category});
+});
 app.put('/category/:c_id',function(req,res){});
 app.delete('/category/:c_id',function(req,res){});
 

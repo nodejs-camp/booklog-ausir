@@ -1,6 +1,10 @@
 doctype html
 html
-  include header
-  body
-    h2 API document
-    block content
+	include header
+	body(ng-app="finpo")
+		include navbar
+		.container-fluid
+			.row
+				block sidebar
+				.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+					block content
