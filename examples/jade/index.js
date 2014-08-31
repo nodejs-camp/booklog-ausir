@@ -11,6 +11,8 @@ var pub = __dirname + '/public';
 // setup middleware
 
 var app = express();
+
+
 app.use(express.static(pub));
 
 // Optional since express defaults to CWD/views
@@ -22,21 +24,56 @@ app.set('views', __dirname + '/views');
 // (although you can still mix and match)
 app.set('view engine', 'jade');
 
-function User(name, email) {
-  this.name = name;
-  this.email = email;
-}
 
-// Dummy users
-var users = [
-    new User('tj', 'tj@vision-media.ca')
-  , new User('ciaran', 'ciaranj@gmail.com')
-  , new User('aaron', 'aaron.heckmann+github@gmail.com')
-];
+var version = '/1' ;
+var posts = [];
 
-app.get('/', function(req, res){
-  res.render('users', { users: users });
+app.post('/aa',function(req,res){
+	res.send({success:true,body:req.body,query:req.query});
+
 });
+
+app.all('*', function(req , res , next){
+	if( req.headers.host === 'localhost:3000'){
+		res.send('access denied');
+	}else{
+		next();
+	}
+});
+
+app.post('/member',function(req,res){});
+app.get('/member',function(req,res){});
+app.put('/member/:m_id',function(req,res){});
+app.delete('/member/:m_id',function(req,res){});
+
+app.post('/organization',function(req,res){});
+app.get('/organization/:g_id',function(req,res){});
+app.put('/organization/:g_id',function(req,res){});
+app.delete('/organization/:g_id',function(req,res){});
+
+app.post('/organization/:g_id/:m_id',function(req,res){});
+app.get('/organization/:g_id/:m_id',function(req,res){});
+app.put('/organization/:g_id/:m_id',function(req,res){});
+app.delete('/organization/:g_id/:m_id',function(req,res){});
+
+app.post('/project',function(req,res){});
+app.get('/project/:p_id',function(req,res){});
+app.put('/project/:p_id',function(req,res){});
+app.delete('/project/:p_id',function(req,res){});
+
+app.post('/category',function(req,res){});
+app.get('/category',function(req,res){});
+app.put('/category/:c_id',function(req,res){});
+app.delete('/category/:c_id',function(req,res){});
+
+app.post('/api/:c_id',function(req,res){});
+app.get('/api/:c_id',function(req,res){});
+app.get('/api/:c_id/:a_id',function(req,res){});
+app.put('/api/:a_id',function(req,res){});
+app.delete('/api/:a_id',function(req,res){});
+
+
+
 
 // change this to a better error handler in your code
 // sending stacktrace to users in production is not good

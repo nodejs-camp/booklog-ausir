@@ -1,0 +1,47 @@
+會員 member
+====
+[post]	/member					建立會員
+[get]	/member/:m_id			取得會員資料
+[put]	/member/:m_id			修改會員
+[delete]/mebmer/:m_id			刪除會員
+
+組織 organization
+====
+[post]	/organization				建立組織
+[get]	/organization/:g_id			取得組織資料與成員
+[put]	/organization/:g_id			修改組織資料
+[delete]/organization/:g_id			刪除組織
+
+組織與會員
+====
+[post]	/organization/:g_id/:m_id	組織加入成員
+[get]	/organization/:g_id/:m_id	取得組織成員等級資料
+[put]	/organization/:g_id/:m_id	修改組織成員等級
+[delete]/organization/:g_id/:m_id	刪除會員
+
+專案 project
+====
+[post]	/project			建立專案
+[get]	/project/:p_id		取得專案資訊
+[put]	/project/:p_id		修改專案資訊
+[delete]/project/:p_id		刪除專案
+
+分類 category
+====
+[post]	/category			建立分類
+[get]	/category			取得分類
+[put]	/category/:c_id		修改分類
+[delete]/category/:c_id		刪除分類
+
+API文件 api
+====
+[post]	/api/:c_id			建立
+[get]	/api/:c_id			取得分類下的 api
+[get]	/api/:c_id/:a_id	取得單筆 api
+[put]	/api/:a_id			修改 api 文件
+[delete]/api/:a_id			刪除
+
+
+
+
+
