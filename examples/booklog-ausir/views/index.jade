@@ -1,6 +1,8 @@
+doctype html
 html
 	head
 		title Hello
 	body
-		h1 Hello world!
-		p today is good day to burn !
+		each val in posts
+			h1: =val.subject
+			p: =val.content

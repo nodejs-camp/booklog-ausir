@@ -25,11 +25,11 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 
-var posts = [];
+var posts = [{subject:'dummy 1',content:'dummy 111'},{subject:'dummy 2',content:'dummy 222'}];
 
 
 app.all('/welecome',function(req,res){
-	res.render('index');
+	res.render('index',{ posts: posts});
 });
 
 app.post('/member',function(req,res){});
