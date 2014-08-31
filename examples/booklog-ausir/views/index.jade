@@ -4,35 +4,58 @@ extend layout.jade
 block sidebar
 	div.col-sm-3.col-md-2.sidebar
 		ul.nav.nav-sidebar
-			li.active
-				a(href='#') {{c_name}}
-			li
-				a(href='#') Reports
-			li
-				a(href='#') Analytics
-			li
-				a(href='#') Export
-			ul.nav.nav-sidebar
-			li
-				a(href='') Nav item
-			li
-				a(href='') Nav item again
-			li
-				a(href='') One more nav
-			li
-				a(href='') Another nav item
-			li
-				a(href='') More navigation
-		ul.nav.nav-sidebar
-			li
-				a(href='') Nav item again
-			li
-				a(href='') One more nav
-			li
-				a(href='') Another nav item
+			li(ng-repeat="category in categories")
+				a(ng-click="getApi(category.c_id)") {{category.c_name}}
+			
 
 
 block content
+	button.btn.btn-success(data-toggle='modal', data-target='#myModal') new API
+	br
+	br
+	.panel.panel-primary(ng-repeat="api in apis")
+		.panel-heading {{api.path}}
+		.panel-body
+			span.label.label-default method
+			span  
+			span.label.label-warning {{api.method}}
+			br
+			br
+			.alert.alert-warning(role="alert") {{api.desc}}
+
+	.modal.fade#myModal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal')
+						span(aria-hidden='true') ×
+						span.sr-only Close
+					h4.modal-title Create a new API method
+				.modal-body
+					form(role='form')
+						.form-group
+							label(for='path') Call URI
+							input#path.form-control(type='text', placeholder='/api/whatever', ng-model="apiData.path")
+						.form-group
+							label(for='desc') Description
+							input#desc.form-control(type='text', placeholder='type some desc', ng-model="apiData.desc")
+						.btn-group(data-toggle='buttons')
+							label.btn.btn-primary(for="option1")
+								input#option1(type='radio', value='get', ng-model="apiData.method" )
+								| GET
+							label.btn.btn-primary(for="option2")
+								input#option2(type='radio', value='post', ng-model="apiData.method")
+								| POST
+							label.btn.btn-primary(for="option3")
+								input#option3(type='radio', value='put', ng-model="apiData.method")
+								| PUT
+							label.btn.btn-primary(for="option4")
+								input#option4(type='radio', value='delete', ng-model="apiData.method")
+								| DELETE
+
+				.modal-footer
+					button.btn.btn-default(type='button', data-dismiss='modal') Close
+					button.btn.btn-primary(type='button', ng-click="createApi()") Save
 	
 
 

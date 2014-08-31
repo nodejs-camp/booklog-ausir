@@ -3,6 +3,8 @@
  */
 
 var express = require('../../lib/express');
+var bodyParser = require('body-parser')
+
 
 // Path to our public directory
 
@@ -11,6 +13,13 @@ var pub = __dirname + '/public';
 // setup middleware
 
 var app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
+// parse application/vnd.api+json as json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 
 app.use(express.static(pub));
@@ -46,10 +55,48 @@ var member = [{m_id:1,m_name:'ausir'}];
 var organization = [{g_id:1,g_name:"finpo"}];
 var project = [{p_id:1,p_name:"bueautyAPI"}];
 var category = [{c_id:1,c_name:'member 會員'},{c_id:2,c_name:'organization 組織'},{c_id:3,c_name:'project 專案'}];
-var api = [{a_id:1,a_data:[{path:"/member",method:"POST",desc:"建立會員"},{path:"/member",method:"GET",desc:"取得會員"}]}];
+var api = {"1":[{path:"/member",method:"POST",desc:"建立會員"},{path:"/member",method:"GET",desc:"取得會員"}]};
 
 app.all('/welecome',function(req,res){
 	res.render('index');
+});
+
+var errorTimes = 3 ;
+app.get('/download',function(req,res){
+	var events = require('events');
+	var workflow = new events.EventEmitter();
+	workflow.outcome = {success : false };
+
+	workflow.on('vaidate', function(){
+		if(errorTimes <= 0){
+			workflow.outcome.msg = '密碼錯誤超過三次' ;
+			return workflow.emit('error');
+		}
+		var password = req.query.password ;
+		if( password === '123456'){
+			return workflow.emit('success');
+		}
+		return workflow.emit('error');
+	});
+	workflow.on('success', function(){
+		workflow.outcome.success = true ;
+		return workflow.emit('response');
+	});
+	workflow.on('error', function(){
+		workflow.outcome.success = false ;
+		errorTimes-- ;
+		
+		return workflow.emit('response');
+	});
+	workflow.on('response', function(){
+		if(workflow.outcome.success){
+			res.download('examples/booklog-ausir/views/script.js');
+		}else{
+			res.send(workflow.outcome);
+		}
+	});
+
+	return workflow.emit('vaidate');
 });
 
 app.post('/member',function(req,res){});
@@ -79,8 +126,15 @@ app.get('/category',function(req,res){
 app.put('/category/:c_id',function(req,res){});
 app.delete('/category/:c_id',function(req,res){});
 
-app.post('/api/:c_id',function(req,res){});
-app.get('/api/:c_id',function(req,res){});
+app.post('/api/:c_id',function(req,res){
+	var c_id = req.params.c_id;
+	api[c_id].push(req.body);
+	res.send({success:true,data:req.body});
+});
+app.get('/api/:c_id',function(req,res){
+	var c_id = req.params.c_id;
+	res.send({success:true,rows:api[c_id]});
+});
 app.get('/api/:c_id/:a_id',function(req,res){});
 app.put('/api/:a_id',function(req,res){});
 app.delete('/api/:a_id',function(req,res){});
