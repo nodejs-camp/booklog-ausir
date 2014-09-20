@@ -4,24 +4,34 @@ extend layout.jade
 block sidebar
 	div.col-sm-3.col-md-2.sidebar
 		ul.nav.nav-sidebar
-			li(ng-repeat="category in categories")
-				a(ng-click="getApi(category.c_id)") {{category.c_name}}
+			li(ng-repeat="api in apis")
+				a(ng-mouseenter="api.hover = true",ng-mouseleave="api.hover = false")
+					{{api.category}} 
+					btn.pull-right(href="",ng-show="api.hover",ng-click="filterCategory(api.category)")
+						i.fa.fa-trash 　
+					btn.pull-right(href="",ng-show="api.hover",ng-click="filterCategory(api.category)")
+						i.fa.fa-filter 　
+					
 			
 
 
 block content
-	button.btn.btn-success(data-toggle='modal', data-target='#myModal') new API
+	button.btn.btn-success(data-toggle='modal', data-target='#myModal')
+		i.fa.fa-file-code-o
+		|  new API
 	br
 	br
-	.panel.panel-primary(ng-repeat="api in apis")
-		.panel-heading {{api.path}}
-		.panel-body
-			span.label.label-default method
-			span  
-			span.label.label-warning {{api.method}}
-			br
-			br
-			.alert.alert-warning(role="alert") {{api.desc}}
+	div(ng-repeat="api in apis | filter:Category")
+		.panel.panel-primary(ng-repeat="row in api.api")
+			.panel-heading 
+				{{row.path}}
+				button.btn.btn-xs.btn-danger.pull-right(ng-click="deleteApi(row)")
+					i.fa.fa-trash
+			.panel-body
+				span.label(ng-class="{'label-primary':row.method == 'POST','label-success':row.method == 'GET','label-warning':row.method == 'PUT','label-danger':row.method == 'DELETE'}") {{row.method}}
+				br
+				br
+				.alert.alert-warning(role="alert") {{row.desc}}
 
 	.modal.fade#myModal
 		.modal-dialog
@@ -34,23 +44,26 @@ block content
 				.modal-body
 					form(role='form')
 						.form-group
+							label(for='category') Category
+							input#category.form-control(type='text', placeholder='member', ng-model="apiData.category")
+						.form-group
 							label(for='path') Call URI
 							input#path.form-control(type='text', placeholder='/api/whatever', ng-model="apiData.path")
 						.form-group
 							label(for='desc') Description
 							input#desc.form-control(type='text', placeholder='type some desc', ng-model="apiData.desc")
 						.btn-group(data-toggle='buttons')
-							label.btn.btn-primary(for="option1")
-								input#option1(type='radio', value='get', ng-model="apiData.method" )
+							label.btn.btn-success(for="option1",ng-click="apiData.method ='GET'")
+								input#option1(type='radio', value='get', ng-model="apiData.method" , name="method" )
 								| GET
-							label.btn.btn-primary(for="option2")
-								input#option2(type='radio', value='post', ng-model="apiData.method")
+							label.btn.btn-primary(for="option2",ng-click="apiData.method ='POST'")
+								input#option2(type='radio', value='post', ng-model="apiData.method" , name="method")
 								| POST
-							label.btn.btn-primary(for="option3")
-								input#option3(type='radio', value='put', ng-model="apiData.method")
+							label.btn.btn-warning(for="option3",ng-click="apiData.method ='PUT'")
+								input#option3(type='radio', value='put', ng-model="apiData.method", name="method")
 								| PUT
-							label.btn.btn-primary(for="option4")
-								input#option4(type='radio', value='delete', ng-model="apiData.method")
+							label.btn.btn-danger(for="option4",ng-click="apiData.method ='DELETE'")
+								input#option4(type='radio', value='delete', ng-model="apiData.method" , name="method")
 								| DELETE
 
 				.modal-footer

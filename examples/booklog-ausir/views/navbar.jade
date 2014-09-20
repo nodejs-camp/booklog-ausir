@@ -6,16 +6,18 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='#') Build Your API doc quickly and beauty
+          a.navbar-brand Build Your API doc quickly and beauty
         .navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href='#') Dashboard
-            li
-              a(href='#') Settings
-            li
-              a(href='#') Profile
+            li(ng-hide="apiId")
+              a(ng-click="doSave()",href="")
+                i.fa.fa-floppy-o
+                |  SAVE
+            li(ng-show="apiId")
+              a(ng-click="doUpdate()",href="")
+                i.fa.fa-floppy-o
+                |  UPDATE
             li
               a(href='#') Help
           form.navbar-form.navbar-right
-            input.form-control(type='text', placeholder='Search...')
+            input.form-control(type='text', placeholder='Search...' , ng-model="Category")

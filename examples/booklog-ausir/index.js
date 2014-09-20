@@ -3,7 +3,16 @@
  */
 
 var express = require('../../lib/express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+
+mongoose.connect('mongodb://localhost/api');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log('MongoDB: connected.');	
+});
 
 
 // Path to our public directory
@@ -49,7 +58,6 @@ app.all('*', function(req, res, next){
   next();
 });
 
-var posts = [{subject:'會員 member',content:'[post]	/member					建立會員'},{subject:'會員 member',content:'[get]	/member/:m_id			取得會員資料'}];
 
 var member = [{m_id:1,m_name:'ausir'}];
 var organization = [{g_id:1,g_name:"finpo"}];
@@ -57,7 +65,17 @@ var project = [{p_id:1,p_name:"bueautyAPI"}];
 var category = [{c_id:1,c_name:'member 會員'},{c_id:2,c_name:'organization 組織'},{c_id:3,c_name:'project 專案'}];
 var api = {"1":[{path:"/member",method:"POST",desc:"建立會員"},{path:"/member",method:"GET",desc:"取得會員"}]};
 
-app.all('/welecome',function(req,res){
+var apiSchema = new mongoose.Schema({
+    api : Array
+});
+
+app.db = {
+	api : mongoose.model('api', apiSchema)
+};
+
+
+
+app.all('/',function(req,res){
 	res.render('index');
 });
 
@@ -99,45 +117,38 @@ app.get('/download',function(req,res){
 	return workflow.emit('vaidate');
 });
 
-app.post('/member',function(req,res){});
-app.get('/member',function(req,res){});
-app.put('/member/:m_id',function(req,res){});
-app.delete('/member/:m_id',function(req,res){});
 
-app.post('/organization',function(req,res){});
-app.get('/organization/:g_id',function(req,res){});
-app.put('/organization/:g_id',function(req,res){});
-app.delete('/organization/:g_id',function(req,res){});
+app.post('/api',function(req,res){
+	var api = req.app.db.api;
+	var db = new api({api:req.body});
+	db.save(function(err ,api){
+		res.send({ success : true , api : api });
+	});
 
-app.post('/organization/:g_id/:m_id',function(req,res){});
-app.get('/organization/:g_id/:m_id',function(req,res){});
-app.put('/organization/:g_id/:m_id',function(req,res){});
-app.delete('/organization/:g_id/:m_id',function(req,res){});
-
-app.post('/project',function(req,res){});
-app.get('/project/:p_id',function(req,res){});
-app.put('/project/:p_id',function(req,res){});
-app.delete('/project/:p_id',function(req,res){});
-
-app.post('/category',function(req,res){});
-app.get('/category',function(req,res){
-	res.send({success:true , rows:category});
+	
 });
-app.put('/category/:c_id',function(req,res){});
-app.delete('/category/:c_id',function(req,res){});
 
-app.post('/api/:c_id',function(req,res){
-	var c_id = req.params.c_id;
-	api[c_id].push(req.body);
-	res.send({success:true,data:req.body});
+app.get('/api/:id',function(req,res){
+	var id = req.params.id;
+	var api = req.app.db.api;
+
+	api.findOne({_id:id}, function(err, api) {
+		if(api){
+			res.send(api);
+		}
+			
+	});
 });
-app.get('/api/:c_id',function(req,res){
-	var c_id = req.params.c_id;
-	res.send({success:true,rows:api[c_id]});
+
+app.put('/api/:id',function(req,res){
+	var id = req.params.id;
+	var api = req.app.db.api;
+	api.update({_id:id} , { api: req.body } , function(err){
+		res.send({ success : true });
+	});
+
 });
-app.get('/api/:c_id/:a_id',function(req,res){});
-app.put('/api/:a_id',function(req,res){});
-app.delete('/api/:a_id',function(req,res){});
+app.delete('/api/:id',function(req,res){});
 
 
 
