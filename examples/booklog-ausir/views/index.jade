@@ -7,7 +7,7 @@ block sidebar
 			li(ng-repeat="api in apis")
 				a(ng-mouseenter="api.hover = true",ng-mouseleave="api.hover = false")
 					{{api.category}} 
-					btn.pull-right(href="",ng-show="api.hover",ng-click="filterCategory(api.category)")
+					btn.pull-right(href="",ng-show="api.hover",ng-click="deleteCategory(api.category)")
 						i.fa.fa-trash 　
 					btn.pull-right(href="",ng-show="api.hover",ng-click="filterCategory(api.category)")
 						i.fa.fa-filter 　

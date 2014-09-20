@@ -93,6 +93,17 @@
 			$('#myModal').modal('hide');
 		};
 
+		$scope.deleteCategory = function(category){
+			if(!confirm("delete this category ? [ "+category+" ]")){
+				return false ;
+			}
+			angular.forEach($scope.apis,function(value,index){
+				if(value.category == category){
+					$scope.apis.splice(index,1);
+				}
+			});
+		};
+
 		$scope.filterCategory = function(category){
 			$scope.Category = category ;
 		};
