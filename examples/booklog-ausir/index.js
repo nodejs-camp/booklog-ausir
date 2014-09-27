@@ -43,6 +43,20 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 
+var apiSchema = new mongoose.Schema({
+    api : Array
+});
+
+var memberSchema = new mongoose.Schema({
+    member : Object
+});
+
+app.db = {
+	api : mongoose.model('api', apiSchema) ,
+	member : mongoose.model('member', memberSchema) 
+};
+
+
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy;
 
@@ -85,22 +99,6 @@ app.all('*', function(req, res, next){
   if ('OPTIONS' == req.method) return res.send(200);
   next();
 });
-
-
-var member = [{m_id:1,m_name:'ausir'}];
-var organization = [{g_id:1,g_name:"finpo"}];
-var project = [{p_id:1,p_name:"bueautyAPI"}];
-var category = [{c_id:1,c_name:'member 會員'},{c_id:2,c_name:'organization 組織'},{c_id:3,c_name:'project 專案'}];
-var api = {"1":[{path:"/member",method:"POST",desc:"建立會員"},{path:"/member",method:"GET",desc:"取得會員"}]};
-
-var apiSchema = new mongoose.Schema({
-    api : Array
-});
-
-app.db = {
-	api : mongoose.model('api', apiSchema)
-};
-
 
 
 app.all('/',function(req,res){
