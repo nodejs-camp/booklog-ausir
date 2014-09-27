@@ -23,12 +23,17 @@ var pub = __dirname + '/public';
 
 var app = express();
 
+var session =  require('express-session');
+app.use(session({secret:'finpo'}));
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
+
 
 
 app.use(express.static(pub));
@@ -60,13 +65,32 @@ app.db = {
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy;
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(null , user);
+  });
+});
+
 passport.use(new FacebookStrategy({
     clientID: '1493291534279075',
     clientSecret: 'abb164e51f25bcfe36530c1be2fe4c3c',
     callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-  	console.log(profile);
+
+  	var member = app.db.member;
+	var db = new member({member:profile});
+	db.save(function(err ,data){
+		console.log(data);
+		return done(null, data);
+	});
   }
 ));
 
@@ -82,7 +106,7 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 // authentication has failed.
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
+                                      failureRedirect: '/auth/facebook' }));
 
 
 
