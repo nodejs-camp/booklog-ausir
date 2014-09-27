@@ -15,7 +15,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top
                 |  {{user.member.displayName}}
             li(ng-show="user.member")
               a(href="/logout")
-                i
+                i.fa.fa-sign-out
                 |  Logout
             li(ng-hide="user.member")
               a(href="/auth/facebook")
