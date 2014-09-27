@@ -10,15 +10,25 @@
 		$scope.apiData = {};
 		$scope.Category = '';
 		$scope.apiId = '';
+		$scope.user = {};
 
 		if(window.location.hash){
 			var hash = window.location.hash ;
 			hash = hash.replace('#','');
 			$http.get('/api/'+hash).success(function(res){
+				console.log(res);
 				$scope.apis = res.api ;
 				$scope.apiId = res._id ;
 			});
 		}
+
+
+		$http.get('/user').success(function(res){
+			console.log(res);
+			if(res){
+				$scope.user = res ;
+			}
+		});
 
 		$scope.deleteApi = function(data){
 			if(!confirm("delete this API ?")){
@@ -35,7 +45,12 @@
 		}
 
 		$scope.doUpdate = function(){
-			$http.put('/api/'+$scope.apiId,$scope.apis).success(function(res){
+			var obj = {};
+			if($scope.user.member){
+				obj.userId = $scope.user._id ;
+			}
+			obj.api = $scope.apis;
+			$http.put('/api/'+$scope.apiId,obj).success(function(res){
 				if(res.success){
 					alert('update success');
 				}else{
@@ -45,7 +60,12 @@
 		};
 
 		$scope.doSave = function(){
-			$http.post('/api',$scope.apis).success(function(res){
+			var obj = {};
+			if($scope.user.member){
+				obj.userId = $scope.user._id ;
+			}
+			obj.api = $scope.apis;
+			$http.post('/api',obj).success(function(res){
 				console.log(res);
 				if(res.success){
 					$scope.apiId = res.api._id ;

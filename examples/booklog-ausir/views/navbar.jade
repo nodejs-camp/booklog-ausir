@@ -9,10 +9,18 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           a.navbar-brand Build Your API doc quickly and beauty
         .navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href="/auth/facebook")
+            li(ng-show="user.member")
+              a(href="/#")
+                i.fa.fa-facebook-square
+                |  {{user.member.displayName}}
+            li(ng-show="user.member")
+              a(href="/logout")
                 i
-                |  login
+                |  Logout
+            li(ng-hide="user.member")
+              a(href="/auth/facebook")
+                i.fa.fa-facebook-square
+                |  Login
             li(ng-hide="apiId")
               a(ng-click="doSave()",href="")
                 i.fa.fa-floppy-o

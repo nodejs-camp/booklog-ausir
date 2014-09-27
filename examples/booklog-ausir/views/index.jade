@@ -25,6 +25,9 @@ block content
 			.panel-heading {{row.path}}
 				button.btn.btn-xs.btn-danger.pull-right(ng-click="deleteApi(row)")
 					i.fa.fa-trash
+				i.pull-right &nbsp;
+				button.btn.btn-xs.btn-warning.pull-right(ng-click="editApi(row)")
+					i.fa.fa-pencil
 			.panel-body
 				span.label(ng-class="{'label-primary':row.method == 'POST','label-success':row.method == 'GET','label-warning':row.method == 'PUT','label-danger':row.method == 'DELETE'}") {{row.method}}
 				br

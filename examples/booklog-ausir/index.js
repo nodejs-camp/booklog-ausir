@@ -49,7 +49,8 @@ app.set('view engine', 'jade');
 
 
 var apiSchema = new mongoose.Schema({
-    api : Array
+    api : Array ,
+    userId : mongoose.Schema.Types.ObjectId
 });
 
 var memberSchema = new mongoose.Schema({
@@ -72,10 +73,8 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(null , user);
-  });
+passport.deserializeUser(function(user, done) {
+	done(null , user);
 });
 
 passport.use(new FacebookStrategy({
@@ -86,11 +85,20 @@ passport.use(new FacebookStrategy({
   function(accessToken, refreshToken, profile, done) {
 
   	var member = app.db.member;
-	var db = new member({member:profile});
-	db.save(function(err ,data){
+
+  	member.findOne({"member.id":profile.id}, function(err, data) {
 		console.log(data);
+		if(!data){
+			var db = new member({member:profile});
+			db.save(function(err ,data){
+				return done(null, data);
+			});
+		}
 		return done(null, data);
 	});
+
+
+	
   }
 ));
 
@@ -126,6 +134,7 @@ app.all('*', function(req, res, next){
 
 
 app.all('/',function(req,res){
+	console.log(req.user);
 	res.render('index');
 });
 
@@ -167,15 +176,21 @@ app.get('/download',function(req,res){
 	return workflow.emit('vaidate');
 });
 
+app.get('/logout',function(req,res){
+	req.logout();
+	res.redirect('/');
+});
+
+app.get('/user',function(req,res){
+	res.send(req.user);
+});
 
 app.post('/api',function(req,res){
 	var api = req.app.db.api;
-	var db = new api({api:req.body});
+	var db = new api(req.body);
 	db.save(function(err ,api){
 		res.send({ success : true , api : api });
 	});
-
-	
 });
 
 app.get('/api/:id',function(req,res){
@@ -193,7 +208,7 @@ app.get('/api/:id',function(req,res){
 app.put('/api/:id',function(req,res){
 	var id = req.params.id;
 	var api = req.app.db.api;
-	api.update({_id:id} , { api: req.body } , function(err){
+	api.update({_id:id} , req.body , function(err){
 		res.send({ success : true });
 	});
 
