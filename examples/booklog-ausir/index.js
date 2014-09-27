@@ -50,7 +50,7 @@ app.set('view engine', 'jade');
 
 var apiSchema = new mongoose.Schema({
     api : Array ,
-    userId : mongoose.Schema.Types.ObjectId
+    userId : { type: mongoose.Schema.Types.ObjectId, ref: 'member' }
 });
 
 var memberSchema = new mongoose.Schema({
@@ -197,7 +197,9 @@ app.get('/api/:id',function(req,res){
 	var id = req.params.id;
 	var api = req.app.db.api;
 
-	api.findOne({_id:id}, function(err, api) {
+	api.findOne({_id:id})
+	.populate('userId')
+	.exec(function(err, api) {
 		if(api){
 			res.send(api);
 		}
