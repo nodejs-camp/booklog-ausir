@@ -5,8 +5,7 @@ block sidebar
 	div.col-sm-3.col-md-2.sidebar
 		ul.nav.nav-sidebar
 			li(ng-repeat="api in apis")
-				a(ng-mouseenter="api.hover = true",ng-mouseleave="api.hover = false")
-					{{api.category}} 
+				a(ng-mouseenter="api.hover = true",ng-mouseleave="api.hover = false") {{api.category}} 
 					btn.pull-right(href="",ng-show="api.hover",ng-click="deleteCategory(api.category)")
 						i.fa.fa-trash 　
 					btn.pull-right(href="",ng-show="api.hover",ng-click="filterCategory(api.category)")
@@ -23,8 +22,7 @@ block content
 	br
 	div(ng-repeat="api in apis | filter:Category")
 		.panel.panel-primary(ng-repeat="row in api.api")
-			.panel-heading 
-				{{row.path}}
+			.panel-heading {{row.path}}
 				button.btn.btn-xs.btn-danger.pull-right(ng-click="deleteApi(row)")
 					i.fa.fa-trash
 			.panel-body

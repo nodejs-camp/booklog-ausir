@@ -9,6 +9,10 @@ nav.navbar.navbar-inverse.navbar-fixed-top
           a.navbar-brand Build Your API doc quickly and beauty
         .navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
+            li
+              a(href="/auth/facebook")
+                i
+                |  login
             li(ng-hide="apiId")
               a(ng-click="doSave()",href="")
                 i.fa.fa-floppy-o
