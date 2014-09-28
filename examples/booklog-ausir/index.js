@@ -50,7 +50,8 @@ app.set('view engine', 'jade');
 
 var apiSchema = new mongoose.Schema({
     api : Array ,
-    userId : { type: mongoose.Schema.Types.ObjectId, ref: 'member' }
+    userId : { type: mongoose.Schema.Types.ObjectId, ref: 'member' } ,
+    createDate : Number
 });
 
 var memberSchema = new mongoose.Schema({
@@ -190,6 +191,18 @@ app.post('/api',function(req,res){
 	var db = new api(req.body);
 	db.save(function(err ,api){
 		res.send({ success : true , api : api });
+	});
+});
+
+app.get('/api/user/:userId',function(req,res){
+	var id = req.params.userId;
+	var api = req.app.db.api;
+
+	api.find({userId:id})
+	.exec(function(err, api) {
+		if(api){
+			res.send(api);
+		}
 	});
 });
 

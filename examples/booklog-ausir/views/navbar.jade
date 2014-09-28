@@ -6,7 +6,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand Build Your API doc quickly and beauty
+          a.navbar-brand APIfiddle
         .navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
             li(ng-show="user.member")
@@ -28,8 +28,10 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             li(ng-show="apiId")
               a(ng-click="doUpdate()",href="")
                 i.fa.fa-floppy-o
-                |  UPDATE
+                |  UPDATE ( {{createDate}} )
             li
-              a(href='#') Help
+              a(href='#')
+                i.fa.fa-paypal
+                |  Donate
           form.navbar-form.navbar-right
-            input.form-control(type='text', placeholder='Search...' , ng-model="Category")
+            input.form-control(type='text', placeholder='Search...' , ng-model="DescSearch")

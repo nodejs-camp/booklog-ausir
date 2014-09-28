@@ -15,13 +15,25 @@ block sidebar
 
 
 block content
-	button.btn.btn-success(data-toggle='modal', data-target='#myModal')
+	button.btn.btn-warning(data-toggle='modal', data-target='#myModal')
 		i.fa.fa-file-code-o
 		|  new API
+	| &nbsp;
+	button.btn.btn-success(ng-show="apiId")
+		i.fa.fa-hand-o-right
+		|  to POSTMAN
+	| &nbsp;
+	button.btn.btn-success(ng-show="apiId")
+		i.fa.fa-hand-o-right
+		|  to EXPRESS 4
+	| &nbsp;
+	button.btn.btn-success(ng-show="apiId")
+		i.fa.fa-hand-o-right
+		|  to Markdown
 	br
 	br
-	div(ng-repeat="api in apis | filter:Category")
-		.panel.panel-primary(ng-repeat="row in api.api")
+	div(ng-repeat="api in apis | filter: {category : Category }")
+		.panel.panel-primary(ng-repeat="row in api.api | filter : DescSearch ")
 			.panel-heading {{row.path}}
 				button.btn.btn-xs.btn-danger.pull-right(ng-click="deleteApi(row)")
 					i.fa.fa-trash
